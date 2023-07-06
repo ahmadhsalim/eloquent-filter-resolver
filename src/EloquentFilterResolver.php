@@ -11,7 +11,7 @@ class EloquentFilterResolver
         $tokens = getTokens($filterString);
         $index = 0;
 
-        resolveFilter($query, $tokens, $index);
+        return resolveFilter($query, $tokens, $index);
     }
 }
 
@@ -154,6 +154,8 @@ function resolveFilter(Builder &$query, array $tokens, int &$index)
 
         parseQuery($query, $tokens, $index, $operand);
     }
+
+    return $query;
 }
 
 function getCondition(string $contition): string
