@@ -1,6 +1,7 @@
 {
     "name": "ahmadhsalim/eloquent-filter-resolver",
     "description": "Resolves a string based filter query into an eloquent query.",
+    "keywords": ["eloquent", "filter", "query", "resolver", "laravel"],
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -13,6 +14,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "illuminate/database": ">=9.0"
+        "php": "^8.1",
+        "illuminate/database": "^9.0|^10.0"
     }
 }
