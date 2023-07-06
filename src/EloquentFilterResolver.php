@@ -80,7 +80,7 @@ function parseQuery(Builder &$query, array $tokens, int &$index, $operand = 'AND
             $value = trim($value, '"');
     }
 
-    if ($condition === 'ILIKE') {
+    if ($condition === 'LIKE') {
         $value = "%{$value}%";
     } else if ($condition === 'IN' || $condition === 'NOT IN') {
         $value = explode('|', $value);
@@ -168,7 +168,7 @@ function getCondition(string $contition): string
         'lt' => '<',
         'gte' => '>=',
         'lte' => '<=',
-        'contains' => 'ILIKE',
+        'contains' => 'LIKE',
         'in' => 'IN',
         'notIn' => 'NOT IN',
     ];
