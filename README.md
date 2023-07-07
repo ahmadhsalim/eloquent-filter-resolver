@@ -39,7 +39,7 @@ In the above example, we create an Eloquent query for the `User` model and apply
 
 The Eloquent Filter Resolver supports the following operators:
 
-- `contains`: Performs a case-insensitive search using the `LIKE` operator. Usage: `contains(field, value)`.
+- `contains`: Performs a case-insensitive search using the `LIKE` operator. Uses `ILIKE` for `pgsql` driver. Usage: `contains(field, value)`.
 - `eq`: Performs an equality comparison using the `=` operator. Usage: `eq(field, value)`.
 - `ne`: Performs a not-equal comparison using the `!=` operator. Usage: `ne(field, value)`.
 - `gt`: Performs a greater-than comparison using the `>` operator. Usage: `gt(field, value)`.
