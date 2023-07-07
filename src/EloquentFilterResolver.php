@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Builder;
 
 class EloquentFilterResolver
 {
+    private static string $databaseDriverName;
+
     public static function resolve(Builder &$query, string $filterString): Builder
     {
         $tokens = self::getTokens($filterString);
         $index = 0;
+
+        self::setDatabaseDriverName($query);
 
         return self::resolveFilter($query, $tokens, $index);
     }
@@ -73,7 +77,7 @@ class EloquentFilterResolver
             default => trim($value, '"'),
         };
 
-        if ($condition === 'LIKE') {
+        if ($condition === ('pgsql' === self::$databaseDriverName ? 'ILIKE' : 'LIKE')) {
             $value = "%{$value}%";
         } else if ($condition === 'IN' || $condition === 'NOT IN') {
             $value = explode('|', $value);
@@ -95,7 +99,7 @@ class EloquentFilterResolver
         $relationMethod = 'whereHas';
         if ($operand === 'OR') $relationMethod = 'orWhereHas';
 
-        $query->$relationMethod($relation, fn($q) => buildQuery($q, 'AND', $condition, $field, $value));
+        $query->$relationMethod($relation, fn($q) => self::buildQuery($q, 'AND', $condition, $field, $value));
     }
 
     private static function buildQuery(Builder &$query, $operand, $condition, $field, $value): void
@@ -163,7 +167,7 @@ class EloquentFilterResolver
             'lt' => '<',
             'gte' => '>=',
             'lte' => '<=',
-            'contains' => 'LIKE',
+            'contains' => 'pgsql' === self::$databaseDriverName ? 'ILIKE' : 'LIKE',
             'in' => 'IN',
             'notIn' => 'NOT IN',
         ];
@@ -173,6 +177,11 @@ class EloquentFilterResolver
         }
 
         throw new \InvalidArgumentException("Invalid condition: {$condition}");
+    }
+
+    private static function setDatabaseDriverName(Builder $builder): void
+    {
+        self::$databaseDriverName =  $builder->getModel()->getConnection()->getDriverName();
     }
 }
 
